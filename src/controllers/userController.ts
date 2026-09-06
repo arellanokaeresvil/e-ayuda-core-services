@@ -13,7 +13,7 @@ class UserController {
     }
 
     index = async (req: Request, res: Response) => {
-        const users = await this.userRepository.findAll();
+        const users = await this.userRepository.list(req.query);
         res.json(users);
     }
 
