@@ -4,13 +4,13 @@
   "description": "",
   "main": "index.js",
   "scripts": {
-    "dev": "nodemon",
+    "dev": "nodemon --exec ts-node src/server.ts",
     "build": "tsc",
     "start": "node dist/server.js",
     "typeorm": "typeorm-ts-node-commonjs",
-    "make:migration": "npm run typeorm migration:create",
-    "migrate": "npm run typeorm migration:run -- -d src/config/database.ts",
-    "migration:revert": "npm run typeorm migration:revert -- -d src/config/database.ts"
+    "make:migration": "typeorm-ts-node-commonjs migration:create -- src/migrations/",
+    "migrate": "typeorm-ts-node-commonjs migration:run -d src/config/database.ts",
+    "migration:revert": "typeorm-ts-node-commonjs migration:revert -d src/config/database.ts"
   },
   "keywords": [],
   "author": "",
@@ -25,9 +25,13 @@
   },
   "devDependencies": {
     "@types/express": "^5.0.6",
+    "@types/jsonwebtoken": "^9.0.10",
     "@types/node": "^26.4.1",
+    "bcryptjs": "^3.0.3",
+    "jsonwebtoken": "^9.0.3",
     "nodemon": "^3.1.14",
+    "ts-node": "^10.9.2",
     "tsx": "^4.23.13",
-    "typescript": "^7.0.2"
+    "typescript": "5.9.3"
   }
 }
