@@ -2,15 +2,7 @@ import BaseRepository from "./base/baseRepository";
 import AppDataSource from "../config/database";
 import { User } from "../entities/User";
 import PaginationRepository from "./base/paginationRepository";
-
-interface UserQueryOptions{
-        search?: string,
-        page?: number,
-        limit?: number,
-        sortBy?: string,
-        orderBy?: "ASC" | "DESC"
-
-}
+import QueryOptions from "../interfaces/queryOptions";
 
 class UserRepository extends BaseRepository {
 
@@ -29,7 +21,7 @@ class UserRepository extends BaseRepository {
         .getOne();
     }
 
-    async list(options: UserQueryOptions ){ 
+    async list(options: QueryOptions ){ 
 
         const query = this.model.createQueryBuilder(this.table).orderBy({
             "user.updated_at":options.orderBy ?? 'DESC'

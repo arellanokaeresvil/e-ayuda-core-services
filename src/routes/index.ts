@@ -8,7 +8,7 @@ router.use("/", authRoutes);
 router.use("/users", userRoutes);
 
 router.get("/core", (req, res) => {
-  res.send("E-Ayuda CORE API reached");
+  res.send(`E-Ayuda CORE API reached ${new Date().toISOString()}`);
 });
 
 export default router;

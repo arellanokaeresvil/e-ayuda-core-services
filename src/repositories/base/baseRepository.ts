@@ -1,3 +1,4 @@
+import AppError from "../../utils/appError";
 
 
 class BaseRepository {
@@ -15,7 +16,7 @@ class BaseRepository {
    async findById(id: string) {
        const find = await this.model.findOneBy({id});
        if (!find) {
-           throw new Error('Not found');
+           throw new AppError('Resource not found', 404);
        }
        return find;
    }
@@ -25,7 +26,7 @@ class BaseRepository {
         try {
             return await this.model.save(data);
         } catch (error) {
-            throw new Error(`Validation failed: ${error}`);
+             throw new AppError(`Error creating item`, 500 ,error);
         }
 
    }
@@ -33,30 +34,30 @@ class BaseRepository {
     async update(id:string, data:object) {
         try {
             const find = await this.findById(id);
-            if(!find) throw  new Error(`Resource not found`);
+            if(!find) throw  new AppError("Resource not found",404);
             return await this.model.update(id, data);
         } catch (error) {
-            throw new Error(`Error updating item: ${error}`);
+            throw new AppError(`Error updating item: ${error}`, 500);
         }
     }
 
    async delete(id: string) {
        try {
            const find = await this.findById(id);
-           if(!find) throw  new Error(`Resource not found`);
+           if(!find) throw  new AppError("Resource not found",404);
            return await this.model.softDelete(id);
        } catch (error) {
-           throw new Error(`Error deleting item: ${error}`);
+           throw new AppError(`Error deleting item: ${error}`, 500);
        }
    }
 
        async restore(id:string) {
         try {
             const find = await this.findDeletedById(id);
-            if(!find) throw new Error("Resource not found");
+            if(!find) throw new AppError("Resource not found",404);
             return this.model.restore(id);
         } catch (error) {
-            throw new Error(`Error restoring item: ${error}`);
+            throw new AppError(`Error restoring item: ${error}`, 500);
         }
     }
 
@@ -69,7 +70,7 @@ class BaseRepository {
                 withDeleted: true
             });
         } catch (error) {
-            throw new Error(`Error finding deleted item: ${error}`);
+            throw new AppError(`Error finding deleted item: ${error}`, 500);
         }
     }
 }

@@ -4,6 +4,7 @@ import dotenv from 'dotenv'
 import routes from "./routes/index";
 
 import AppDataSource from "./config/database";
+import errorHandler from './middlewares/errorHandler';
 
 dotenv.config();
 
@@ -15,7 +16,7 @@ app.use(express.urlencoded({ extended: true }));
 
 app.use("/api", routes);
 
-
+app.use(errorHandler)
 
 AppDataSource.initialize()
     .then(() => {
