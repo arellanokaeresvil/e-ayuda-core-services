@@ -8,7 +8,7 @@
     "build": "tsc",
     "start": "node dist/server.js",
     "typeorm": "typeorm-ts-node-commonjs",
-    "make:migration": "typeorm-ts-node-commonjs migration:create -- src/migrations/",
+    "make:migration": "typeorm-ts-node-commonjs migration:create ",
     "migrate": "typeorm-ts-node-commonjs migration:run -d src/config/database.ts",
     "migration:revert": "typeorm-ts-node-commonjs migration:revert -d src/config/database.ts"
   },

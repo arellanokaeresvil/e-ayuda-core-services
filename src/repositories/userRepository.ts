@@ -30,8 +30,8 @@ class UserRepository extends BaseRepository {
         if(options.search){
             query.andWhere(
                 `(
-                    user.name LIKE :search
-                    OR user.email LIKE :search
+                    user.name ILIKE :search
+                    OR user.email ILIKE :search
                 )`,
                 {
                     search: `%${options.search}%`
