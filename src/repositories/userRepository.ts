@@ -3,6 +3,7 @@ import AppDataSource from "../config/database";
 import { User } from "../entities/User";
 import PaginationRepository from "./base/paginationRepository";
 import QueryOptions from "../interfaces/queryOptions";
+import AppError from "../utils/appError";
 
 class UserRepository extends BaseRepository {
 
@@ -14,11 +15,17 @@ class UserRepository extends BaseRepository {
     }
 
     async findByEmail(email: string) {
-        return AppDataSource.getRepository(User)
+        const user = await AppDataSource.getRepository(User)
         .createQueryBuilder("user")
         .addSelect("user.password")
         .where("user.email = :email", { email })
         .getOne();
+
+        if(!user) {
+            throw new AppError('User not found', 404);
+        }
+
+        return user;
     }
 
     async list(options: QueryOptions ){ 
