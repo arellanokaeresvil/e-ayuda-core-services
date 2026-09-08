@@ -4,6 +4,8 @@ import dotenv from 'dotenv'
 import routes from "./routes/index";
 
 import AppDataSource from "./config/database";
+import errorHandler from './middlewares/errorHandler';
+import { generalRateLimiter } from './middlewares/rateLimiter';
 
 dotenv.config();
 
@@ -12,10 +14,11 @@ const PORT = process.env.PORT || 3000;
 
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
+app.use(generalRateLimiter)
 
 app.use("/api", routes);
 
-
+app.use(errorHandler)
 
 AppDataSource.initialize()
     .then(() => {

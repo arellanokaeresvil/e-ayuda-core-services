@@ -2,15 +2,8 @@ import BaseRepository from "./base/baseRepository";
 import AppDataSource from "../config/database";
 import { User } from "../entities/User";
 import PaginationRepository from "./base/paginationRepository";
-
-interface UserQueryOptions{
-        search?: string,
-        page?: number,
-        limit?: number,
-        sortBy?: string,
-        orderBy?: "ASC" | "DESC"
-
-}
+import QueryOptions from "../interfaces/queryOptions";
+import AppError from "../utils/appError";
 
 class UserRepository extends BaseRepository {
 
@@ -22,14 +15,20 @@ class UserRepository extends BaseRepository {
     }
 
     async findByEmail(email: string) {
-        return AppDataSource.getRepository(User)
+        const user = await AppDataSource.getRepository(User)
         .createQueryBuilder("user")
         .addSelect("user.password")
         .where("user.email = :email", { email })
         .getOne();
+
+        if(!user) {
+            throw new AppError('User not found', 404);
+        }
+
+        return user;
     }
 
-    async list(options: UserQueryOptions ){ 
+    async list(options: QueryOptions ){ 
 
         const query = this.model.createQueryBuilder(this.table).orderBy({
             "user.updated_at":options.orderBy ?? 'DESC'
@@ -38,8 +37,8 @@ class UserRepository extends BaseRepository {
         if(options.search){
             query.andWhere(
                 `(
-                    user.name LIKE :search
-                    OR user.email LIKE :search
+                    user.name ILIKE :search
+                    OR user.email ILIKE :search
                 )`,
                 {
                     search: `%${options.search}%`

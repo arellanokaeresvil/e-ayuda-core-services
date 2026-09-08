@@ -1,5 +1,6 @@
 
 import AuthService from "../services/authService";
+import ApiResponse from "../utils/response";
 
 class AuthController {
 
@@ -9,10 +10,15 @@ class AuthController {
         this.authService = authService;
     }
 
-    login =async (req: any, res: any) => {
+    login = async (req: any, res: any) => {
         const { email, password } = req.body;
         const user = await this.authService.login(email, password);
-        return res.json({ message: "Login successful", user });
+      return ApiResponse.success(res, user, 'User logged in successfully');
+    }
+
+    logout = async (req: any, res: any) => {
+        // Implement logout logic here for cookie-based authentication
+        return ApiResponse.success(res, null, 'User logged out successfully');
     }
 
 }

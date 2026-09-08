@@ -1,7 +1,10 @@
 import express from 'express';
 import UserController from '../containers/userContainers';
+import authMiddleware from '../middlewares/authMiddleware';
 
 const router = express.Router();
+
+router.use(authMiddleware)
 
 router.get('/', UserController.index)
 router.post('/', UserController.store)

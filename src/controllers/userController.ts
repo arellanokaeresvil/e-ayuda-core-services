@@ -2,6 +2,7 @@ import UserRepository from "../repositories/userRepository";
 import UserService from "../services/userService";
 
 import { Request, Response } from "express";
+import ApiResponse from "../utils/response";
 
 class UserController {
 
@@ -14,47 +15,36 @@ class UserController {
 
     index = async (req: Request, res: Response) => {
         const users = await this.userRepository.list(req.query);
-        res.json(users);
+       return ApiResponse.success(res, users, 'Users retrieved successfully');
     }
 
     store = async (req: Request, res: Response) => {
         const user = await this.userService.create(req.body);
-        res.status(201).json(user);
+        return ApiResponse.created(res, user, 'User created successfully');
     }
 
     show = async (req: Request, res: Response) => {
         const { id } = req.params;
         const user = await this.userRepository.findById(id as string);
-        if (!user) {
-            return res.status(404).json({ message: 'User not found' });
-        }
-        res.json(user);
+       return ApiResponse.success(res, user, 'User retrieved successfully');
     }
 
     update = async (req: Request, res: Response) => {
         const { id } = req.params;
-        const user = await this.userRepository.findById(id as string);
-        if (!user) {
-            return res.status(404).json({ message: 'User not found' });
-        }
         const updatedUser = await this.userRepository.update(id as string, req.body);
-        res.json(updatedUser);
+       return ApiResponse.success(res, updatedUser, 'User updated successfully');
     }
 
     destroy = async (req: Request, res: Response) => {
         const { id } = req.params;
-        const user = await this.userRepository.findById(id as any);
-        if (!user) {
-            return res.status(404).json({ message: 'User not found' });
-        }
         await this.userRepository.delete(id as any);
-        res.status(204).send();
+        return ApiResponse.success(res, null, 'User deleted successfully');
     }
 
        restore = async (req: Request, res: Response) => {
        const { id } = req.params;
        const result = await this.userRepository.restore(id as string);
-       res.send(result);
+       return ApiResponse.success(res, result, 'User restored successfully');
    };
 }
 

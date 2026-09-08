@@ -44,7 +44,7 @@ export class CreateUserTable1788693007042 implements MigrationInterface {
                     name: "barangay_id",
                     type: "varchar",
                     length: "255",
-                    isNullable: false
+                    isNullable: true
                 },
                 {
                     name: "is_active",
